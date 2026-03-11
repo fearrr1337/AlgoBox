@@ -29,7 +29,7 @@
 
 ### Использование
 
-```
+```cpp
 #include <AlgoBox/sorting.hpp>
 #include <vector>
 #include <iostream>
@@ -46,7 +46,7 @@ int main() {
 ```
 
 ### 📁 Структура проекта
-
+```
 AlgoBox/
 ├── include/
 │   └── AlgoBox/          # Заголовки (.hpp)
@@ -57,7 +57,7 @@ AlgoBox/
 ├── example/
 │   └── main.cpp
 └── AlgoBox.lib           # Статическая библиотека
-
+```
 
 ### 🛠 Сборка (Visual Studio)
 
@@ -66,7 +66,7 @@ AlgoBox/
 3) Найти AlgoBox.lib в папке Debug/Release
 
 Подключение в другом проекте:
-```
+```cpp
 #pragma comment(lib, "AlgoBox.lib")
 #include <AlgoBox/sorting.hpp>
 ```
@@ -82,6 +82,6 @@ AlgoBox/
 
 MIT — свободное использование в любых проектах.
 
-##3 🐛 Баги и предложения
+### 🐛 Баги и предложения
 
 Создай Issue в репозитории.
