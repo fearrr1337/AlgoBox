@@ -242,13 +242,14 @@ namespace ab {
     // =======================================================================================
 
     // Heap base class
-    template<typename T, typename Compare>
+    template<typename T, typename Compare> // Compare - std::less<> or std::greater<>
     class heap_base {
     protected:
-        std::vector<T> data;
-        Compare comp;
+        std::vector<T> data; // heap storage
+        Compare comp; // comparator
 
-        void heapify_up(size_t i) {
+        // bubble up || O(log n) 
+        void heapify_up(size_t i) { 
             while (i > 0) {
                 size_t parent = (i - 1) / 2;
 
@@ -261,6 +262,7 @@ namespace ab {
             }
         }
 
+        // bubble down || O(log n) 
         void heapify_down(size_t i) {
             size_t n = data.size();
 
@@ -285,11 +287,13 @@ namespace ab {
         }
     public:
 
+        // Add element || O(log n) 
         void push(const T& value) {
             data.push_back(value);
             heapify_up(data.size() - 1);
         }
 
+        // Del element || O(log n) 
         void pop() {
             if (empty()) {
                 throw std::out_of_range("heap is empty");
@@ -300,6 +304,7 @@ namespace ab {
             heapify_down(0);
         }
 
+        // Get first element || O(1)
         const T& top() const {
             if (empty()) {
                 throw std::out_of_range("heap is empty");
@@ -307,11 +312,13 @@ namespace ab {
             return data[0];
         }
 
+        // O(1)
         bool empty() const {
             return data.empty();
         }
 
-        size_t size const{
+        // O(1)
+        size_t size() const{
             return data.size();
         }
     };
@@ -324,4 +331,142 @@ namespace ab {
     // MIN Heap
     template <typename T>
     class min_heap : public heap_base<T, std::greater<>> {};
+
+
+
+
+    // =======================================================================================
+
+
+    // BST (Binary Search Tree)
+    template<typename T>
+    class bst {
+    private:
+        struct Node {
+            T value;
+            Node* left;
+            Node* right;
+
+            Node(const T& val) : value(val), left(nullptr), right(nullptr) {}
+        };
+
+        Node* root = nullptr;
+
+        // insert
+        Node* insert(Node* node, const T& value) {
+            if (!node) {
+                return new Node(value);
+            }
+
+            if (value < node->value) {
+                node->left = insert(node->left, value);
+            }
+            else if (value > node->value) {
+                node->right = insert(node->right, value);
+            }
+
+            return node;
+        }
+
+        // Search
+        bool contains(Node* node, const T& value) const {
+            if (!node) {
+                return false;
+            }
+
+            if (value == node->value) {
+                return true;
+            }
+
+            if (value < node->value) {
+                return contains(node->left, value);
+            }
+
+            return contains(node->right, value);
+        }
+
+        // Find min
+        Node* find_min(Node* node) {
+            while (node && node->left) {
+                node = node->left;
+            }
+            return node;
+        }
+
+        // Del 
+        Node* remove(Node* node, const T& value) {
+            if (!node) {
+                return nullptr;
+            }
+
+            if (value < node->value) {
+                node->left = remove(node->left, value);
+            }
+            else if (value > node->value) {
+                node->right = remove(node->right, value);
+            }
+            else {
+                if (!node->left) {
+                    Node* temp = node->right;
+                    delete node;
+                    return temp;
+                }
+                else if (!node->right) {
+                    Node* temp = node->left;
+                    delete node;
+                    return temp;
+                }
+                Node* temp = find_min(node->right);
+                node->value = temp->value;
+                node->right = remove(node->right, temp->value);
+            }
+
+            return node;
+        }
+
+        void inorder(Node* node) const {
+            if (!node) {
+                return;
+            }
+
+            inorder(node->left);
+            std::cout << node->value << " ";
+            inorder(node->right);
+        }
+
+        void clear(Node* node) {
+            if (!node) {
+                return;
+            }
+
+            clear(node->left);
+            clear(node->right);
+            delete node;
+        }
+    public:
+        ~bst() {
+            clear(root);
+        }
+
+        void insert(const T& value) {
+            root = insert(root, value);
+        }
+
+        void remove(const T& value) {
+            root = remove(root, value);
+        }
+
+        bool contains(const T& value) const {
+            return contains(root, value);
+        }
+
+        void print_inorder() const {
+            inorder(root);
+            std::cout << "\n";
+        }
+
+    };
+
+
 }
+
