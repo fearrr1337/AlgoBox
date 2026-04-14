@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 #include <vector>
 #include <stdexcept>
 #include <cstddef>
@@ -6,52 +6,52 @@
 
 namespace ab {
 
-	// Stack
-	template<typename T>
-	class stack {
-	private:
-		std::vector<T> data;
+    // Stack
+    template<typename T>
+    class stack {
+    private:
+        std::vector<T> data;
 
-	public:
-		// Add element
-		void push(const T& value) {
-			data.push_back(value);
-		}
+    public:
+        // Add element
+        void push(const T& value) {
+            data.push_back(value);
+        }
 
-		// Del element
-		void pop() {
-			if (empty()) {
-				throw std::out_of_range("Stack is empty");
-			}
-			data.pop_back();
-		}
+        // Del element
+        void pop() {
+            if (empty()) {
+                throw std::out_of_range("Stack is empty");
+            }
+            data.pop_back();
+        }
 
-		// Get top element
-		T& top() {
-			if (empty()) {
-				throw std::out_of_range("Stack is empty");
-			}
-			return data.back();
-		}
+        // Get top element
+        T& top() {
+            if (empty()) {
+                throw std::out_of_range("Stack is empty");
+            }
+            return data.back();
+        }
 
-		const T& top() const {
-			if (empty()) {
-				throw std::out_of_range("Stack is empty");
-			}
-		}
+        const T& top() const {
+            if (empty()) {
+                throw std::out_of_range("Stack is empty");
+            }
+        }
 
-		// Empty test
-		bool empty() {
-			return data.empty();
-		}
+        // Empty test
+        bool empty() {
+            return data.empty();
+        }
 
-		// arr size
-		size_t size() const {
-			return data.size();
-		}
-	};
+        // arr size
+        size_t size() const {
+            return data.size();
+        }
+    };
 
-	// =======================================================================================
+    // =======================================================================================
 
 
     // BASE QUEUE/DEQUE CLASS
@@ -91,7 +91,7 @@ namespace ab {
             delete[] data;
         }
 
-        
+
         bool empty() const {
             return count == 0;
         }
@@ -104,7 +104,7 @@ namespace ab {
     // =======================================================================================
 
     // Queue (FIFO) ( ring buffer )
-    
+
     template<typename T>
     class queue : public RingBufferBase<T> {
     public:
@@ -249,7 +249,7 @@ namespace ab {
         Compare comp; // comparator
 
         // bubble up || O(log n) 
-        void heapify_up(size_t i) { 
+        void heapify_up(size_t i) {
             while (i > 0) {
                 size_t parent = (i - 1) / 2;
 
@@ -318,7 +318,7 @@ namespace ab {
         }
 
         // O(1)
-        size_t size() const{
+        size_t size() const {
             return data.size();
         }
     };
@@ -467,6 +467,400 @@ namespace ab {
 
     };
 
+    // =======================================================================================
+
+    // LINKED LIST
+
+
+    // Node
+    template<typename T>
+    class Node {
+    private:
+        T data;
+        Node* next;
+
+    public:
+        // Constructor
+        Node(T val) : data(val), next(nullptr) {}
+
+        // Get data
+        T getData() const { 
+            return data; 
+        }
+
+        // Set data
+        void setData(const T& val) {
+            data = val;
+        }
+
+        // Get next node
+        Node* getNext() const {
+            return next;
+        }
+
+        // Set next node
+        void setNext(Node* node) {
+            next = node;
+        }
+    };
+
+    // LinkedList
+    template<typename T>
+    class linked_list {
+    private:
+        Node<T>* head;
+        Node<T>* tail;
+        size_t count;
+
+        // Clear all nodes
+        void clear() {
+            while (head) {
+                Node<T>* temp = head;
+                head = head->getNext();
+                delete temp;
+            }
+            tail = nullptr;
+            count = 0;
+        }
+
+    public:
+        // Constructor
+        linked_list() : head(nullptr), tail(nullptr), count(0) {}
+
+        // Destructor
+        ~linked_list() {
+            clear();
+        }
+
+        // Is empty test
+        bool empty() {
+            return count == 0;
+        }
+
+        // Size
+        size_t size() {
+            return count;
+        }
+
+        // Push back
+        void push_back(const T& value) {
+            Node<T>* new_node = new Node<T>(value);
+            if (!head) {
+                head = tail = new_node;
+            }
+            else {
+                tail->setNext(new_node);
+                tail = new_node;
+            }
+            ++count;
+        }
+
+        // Push front
+        void push_front(const T& value) {
+            Node<T>* new_node = new Node<T>(value);
+            new_node->setNext(head);
+            if (!tail) {
+                tail = new_node;
+            }
+            ++count;
+        }
+
+        // Remove front 
+        void pop_front() {
+            if (empty()) {
+                throw std::out_of_range("LinkedList is empty");
+            }
+
+            Node<T>* temp = head;
+            head = head->getNext();
+            if (!head) {
+                tail = nullptr;
+            }
+            delete temp;
+            --count;
+        }
+
+        // Remove back
+        void pop_back() {
+            if (empty()) {
+                throw std::out_of_range("LinkedList is empty");
+            }
+
+            if (head == tail) {
+                delete head;
+                head = tail = nullptr;
+            }
+            else {
+                Node<T>* curr = head;
+                while (curr->getNext() != tail) {
+                    curr = curr->getNext();
+                }
+                delete tail;
+                tail = curr;
+                tail->setNext(nullptr);
+            }
+            --count;
+        }
+
+        // Get front element
+        T& front() {
+            if (empty()) {
+                throw std::out_of_range("LinkedList empty");
+            }
+            
+            return head->getData();
+        }
+
+        // Get front element (const)
+        const T& front() const{
+            if (empty()) {
+                throw std::out_of_range("LinkedList empty");
+            }
+
+            return head->getData();
+        }
+
+        // Get back element
+        T& back() {
+            if (empty()) {
+                throw std::out_of_range("LinkedList empty");
+            }
+
+            return tail->getData();
+        }
+
+        // Get back element (const)
+        const T& back() const {
+            if (empty()) {
+                throw std::out_of_range("LinkedList empty");
+            }
+
+            return tail->getData();
+        }
+        
+        // Print list
+        void print() const {
+            Node<T>* curr = head;
+            while (head) {
+                std::cout << curr->getData() << " ";
+                curr = curr->getNext();
+            }
+            std::cout << std::endl;
+        }
+
+    };
+
+    // =======================================================================================
+
+    // DOUBLY LINKED LIST
+
+    // DOUBLY NODE
+    template<typename T>
+    class doubly_node {
+    private:
+        T data;
+        doubly_node* next;
+        doubly_node* prev;
+
+    public:
+        // Constructor
+        doubly_node(T val = T()) : data(val), next(nullptr), prev(nullptr) {}
+
+        // Get data
+        T getData() const {
+            return data;
+        }
+
+        // Set data
+        void setData(const T& val) {
+            data = val;
+        }
+        
+        // Get next node
+        doubly_node* getNext() const {
+            return next;
+        }
+
+        // Set next node
+        void setNext(doubly_node* node) {
+            next = node;
+        }
+
+        // Get prev node
+        doubly_node* getPrev() const {
+            return prev;
+        }
+
+        // Set prev node
+        void setPrev(doubly_node* node) {
+            prev = node;
+        }
+
+    };
+
+    // DOUBLE LINKED LIST
+    template<typename T>
+    class doubly_linked_list {
+    private:
+        doubly_node<T>* head;
+        doubly_node<T>* tail;
+        size_t count;
+
+        // Cleat all nodes
+        void clear() {
+            while (head) {
+                doubly_node<T>* temp = head;
+                head = head->getNext();
+                delete temp;
+            }
+            tail = nullptr;
+            count = 0;
+        }
+
+    public:
+        // Constructor 
+        doubly_linked_list() : head(nullptr), tail(nullptr), count(0) {}
+
+        // Destructor
+        ~doubly_linked_list() {
+            clear();
+        }
+
+        // Empty test
+        bool empty() const {
+            return count == 0;
+        }
+
+        // Size
+        size_t size() const {
+            return count;
+        }
+
+        // Push back
+        void push_back(const T& value) {
+            doubly_node<T>* new_node = new doubly_node<T>(value);
+            if (!head) {
+                head = tail = new_node;
+            }
+            else {
+                tail->setNext(new_node);
+                new_node->setPrev(tail);
+                tail = new_node;
+            }
+            ++count;
+        }
+
+        // Push front
+        void push_front(const T& value) {
+            doubly_node<T>* new_node = new doubly_node<T>(value);
+            if (!head) {
+                head = tail = new_node();
+            }
+            else {
+                new_node->setNext(head);
+                head->setPrev(new_node);
+                head = new_node;
+            }
+            ++count;
+        }
+
+        // Remove front 
+        void pop_front() {
+            if (empty()) {
+                throw std::out_of_range("Doubly LinkedList is empty");
+            }
+
+            doubly_node<T>* temp = head;
+            head = head->getNext();
+            if (head) {
+                head->setPrev(nullptr);
+            }
+            else {
+                tail = nullptr;
+            }
+
+            delete temp;
+            --count;
+        }
+
+        // Remove back
+        void pop_back() {
+            if (empty()) {
+                throw std::out_of_range("Doubly LinkedList is empty");
+            }
+
+            doubly_node<T>* temp = tail;
+            tail = tail->getPrev();
+            if (tail) {
+                tail->setNext(nullptr);
+            }
+            else {
+                head = nullptr;
+            }
+
+            delete temp;
+            --count;
+        }
+
+        // Front Element
+        T& front() {
+            if (empty()) {
+                throw std::out_of_range("Doubly LinkedList is empty");
+            }
+
+            return head->getData();
+        }
+
+
+        // Front Element (const)
+        const T& front() const {
+            if (empty()) {
+                throw std::out_of_range("Doubly LinkedList is empty");
+            }
+
+            return head->getData();
+        }
+
+        // Back Element
+        T& back() {
+            if (empty()) {
+                throw std::out_of_range("Doubly LinkedList is empty");
+            }
+
+            return tail->getData();
+        }
+
+        // Back Element (consst)
+        const T& back() const {
+            if (empty()) {
+                throw std::out_of_range("Doubly LinkedList is empty");
+            }
+
+            return tail->getData();
+        }
+
+
+        // Print forward
+        void print_forward() const {
+            doubly_node<T>* curr = head;
+            while (curr) {
+                std::cout << curr->getData() << " ";
+                curr = curr->getNext();
+            }
+            std::cout << std::endl;
+        }
+
+        // Print reverse
+        void print_reverse() const {
+            doubly_node<T> curr = tail;
+            while (curr) {
+                std::count << curr->getData() << " ";
+                curr = curr->getPrev();
+            }
+            std::cout << std::endl;
+        }
+
+    };
+
 
 }
-
