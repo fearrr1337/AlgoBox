@@ -2,6 +2,7 @@
 #include <vector>
 #include <stdexcept>
 #include <cstddef>
+#include <new>
 
 
 namespace ab {
@@ -467,6 +468,132 @@ namespace ab {
 
     };
 
+
+    // =======================================================================================
+
+    // TREAP 
+    template<typename T>
+    class treap {
+    private:
+        struct Node {
+            T key;
+            int priority;
+            Node* left;
+            Node* right;
+
+            Node(const T& k) : key(k), priority(rand()), left(nullptr), right(nullptr) {}
+        };
+
+        Node* root = nullptr;
+
+        // split
+        void split(Node* node, const T& key, Node*& left, Node*& right) {
+            if (!node) {
+                left = right = nullptr;
+            }
+            else if (key < node->key) {
+                split(node->left, key, left, node->left);
+                right = node;
+            }
+            else {
+                split(node->right, key, node->right, right);
+                left = node;
+            }
+        }
+
+        // merge trees
+        Node* merge(Node* left, Node* right) {
+            if (!left || !right) {
+                return left ? left : right;
+            }
+            else if (left->priority > right->priority) {
+                left->right = merge(left->right, right);
+                return left;
+            }
+            else {
+                right->left = merge(left, right->left);
+                return right;
+            }
+        }
+
+        // insert
+        Node* insert(Node* node, Node* item) {
+            if (!node) {
+                return item;
+            }
+
+            if (item->priority > node->priority) {
+                split(node, item->key, item->left, item->right);
+                return item;
+            }
+
+            if (item->key < node->key) {
+                node->left = insert(node->left, item);
+            }
+            else {
+                node->right = insert(node->right, item);
+            }
+
+            return node;
+        }
+
+
+        // remove
+        Node* remove(Node* node, const T& key) {
+            if (!node) {
+                return nullptr;
+            }
+
+            if (node->key == key) {
+                Node* res = merge(node->left, node->right);
+                delete node;
+                reutrn res;
+            }
+
+            if (key < node->key) {
+                node->left = remove(node->left, key);
+            }
+            else {
+                node->right = remove(node->right, key);
+            }
+
+            return node;
+        }
+
+
+        // search
+        bool contains(Node* node, const T& key) const {
+            if (!node) {
+                return false;
+            }
+
+            if (node->key == key) {
+                return true;
+            }
+
+            if (key < node->key) {
+                return contains(node->left, key);
+            }
+            else {
+                return contains(node->right, key);
+            }
+        }
+
+    public:
+        void insert(const T& key) {
+            root = insert(root, new Node(key));
+        }
+
+        void remove(const T& key) {
+            root = remove(root, key);
+        }
+
+        bool contains(const T& key) const {
+            return contains(root, key);
+        }
+  };
+
+
     // =======================================================================================
 
     // LINKED LIST
@@ -862,5 +989,53 @@ namespace ab {
 
     };
 
+    // =======================================================================================
+    
 
+    // ARENA ALLOCATOR (BUMP ALLOCATOR)
+
+    class arena {
+    private:
+        char* data; // beginning of memory
+        size_t capacity; // overall size 
+        size_t offset; // current position
+
+    public:
+        arena(size_t size) : capacity(size), offset(0) {
+            data = static_cast<char*>(::operator new(size));
+        }
+
+        ~arena() {
+            ::operator delete(data);
+        }
+
+        // memory allocation
+        void* allocate(size_t size, size_t aligment = alignof(std::max_align_t)) {
+            size_t current = reinterpret_cast<size_t>(data + offset);
+
+            size_t aligned = (current + aligment - 1) & ~(aligment - 1);
+
+            size_t new_offset = aligned - reinterpret_cast<size_t>(data) + size;
+
+            if (new_offset > capacity) {
+                throw std::bad_alloc();
+            }
+
+            offset = new_offset;
+            return reinterpret_cast<void*>(aligned);
+        }
+
+        // create object
+        template<typename T, typename... Args>
+        T* create(Args&&... args) {
+            void mem = allocate(sizeof(T), alignof(T));
+            return new (mem) T(std::forward<Args>(args)...);
+        }
+
+        // reset all memory
+        void reset() {
+            offset = 0;
+        }
+
+    };
 }
