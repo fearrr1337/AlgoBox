@@ -547,7 +547,7 @@ namespace ab {
             if (node->key == key) {
                 Node* res = merge(node->left, node->right);
                 delete node;
-                reutrn res;
+                return res;
             }
 
             if (key < node->key) {
