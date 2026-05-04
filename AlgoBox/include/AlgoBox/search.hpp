@@ -1,6 +1,7 @@
 #pragma once
 #include <algorithm>
 #include <iterator>
+#include <vector>
 
 namespace ab {
 
@@ -98,5 +99,11 @@ namespace ab {
 
 	// ===================================================================================
 
+	// Prefix sum
+
+	template<typename It>
+	auto prefix_sum(It first, It last) {
+		using T = typename std::iterator
+	}
 
 }
