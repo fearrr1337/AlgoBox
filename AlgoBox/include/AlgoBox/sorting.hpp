@@ -83,7 +83,7 @@ namespace ab {
 
         for (size_t i = 0; i < n - 1; ++i) {
             for (size_t j = i + 1; j < n; ++j) {
-                if (comp(arr[j], arr[i]) {
+                if (comp(arr[j], arr[i])) {
                     std::swap(arr[i], arr[j]);
                 }
             }
@@ -100,7 +100,7 @@ namespace ab {
         for (size_t i = 0; i < n - 1; i++) {
             size_t min_index = i;
             for (size_t j = i + 1; j < n; j++) {
-                if (comp(arr[j], arr[min_index]) {
+                if (comp(arr[j], arr[min_index])) {
                     min_index = j;
                 }
             }
@@ -136,11 +136,14 @@ namespace ab {
     void shell_sort(Container& arr, Compare comp = Compare()) {
         auto n = std::size(arr);
         if (n < 2) return;
+
         for (size_t gap = n / 2; gap > 0; gap /= 2) {
-            for (size_t i = gap; i < n; i += gap) {
-                auto temp = arr[i];
-                auto j = i;
-                while (j >= gap && comp(arr[j - gap], temp)) {
+            for (size_t i = gap; i < n; ++i) {
+                auto temp = std::move(arr[i]); 
+                size_t j = i;
+
+                
+                while (j >= gap && comp(temp, arr[j - gap])) {
                     arr[j] = std::move(arr[j - gap]);
                     j -= gap;
                 }

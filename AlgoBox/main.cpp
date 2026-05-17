@@ -1,12 +1,21 @@
 #include <vector>
 #include <iostream>
-#include "include/AlgoBox/sorting.hpp"
+#include "examples/headers/sorting_examples.hpp"
+
+
+
 
 int main() {
-    std::vector<int> vec = { 5, 2, 9, 1, 5, 6,123,123,123,123,123,123,12,31,23,3645784,8543,8,458,5,69,56969,569,4 };
-    ab::merge_sort(vec); // по умолчанию std::less<> — сортировка по возрастанию
+    setlocale(LC_ALL, "RUS");
 
-    std::cout << "Sorted vector: ";
-    for (int x : vec) std::cout << x << " ";
-    std::cout << "\n";
+    // sortings
+    test_bubble_sort();
+    test_merge_sort();
+    test_exchange_selection_sort();
+    test_selection_sort();
+    test_insertion_sort();
+    test_shell_sort();
+
+    
+
 }
