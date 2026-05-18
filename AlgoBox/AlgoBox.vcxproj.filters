@@ -24,12 +24,18 @@
     <ClInclude Include="examples\headers\sorting_examples.hpp">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
+    <ClInclude Include="examples\headers\search_examples.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
     <ClCompile Include="examples\implementation\sorting_examples.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="examples\implementation\search_examples.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
   </ItemGroup>

@@ -111,7 +111,7 @@ namespace ab {
 			return pref;
 		}
 
-		pref.reverse(std::distance(first, last));
+		pref.reserve(std::distance(first, last));
 
 		T sum = 0;
 		for (auto it = first; it != last; ++it) {
@@ -153,7 +153,7 @@ namespace ab {
 
 	template<typename It>
 	int scaning_line(It first, It end) {
-		using Pair = typename std::iterator<It>::value_type;
+		using Pair = typename std::iterator_traits<It>::value_type;
 
 		struct Event {
 			int x;
@@ -162,7 +162,7 @@ namespace ab {
 
 		std::vector<Event> events;
 
-		for (auto it = first; it != last; ++it) {
+		for (auto it = first; it != end; ++it) {
 			events.push_back({ it->first, +1 });
 			events.push_back({ it->second, -1 });
 		}
