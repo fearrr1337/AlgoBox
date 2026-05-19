@@ -1,4 +1,4 @@
-#include "../headers/search_examples.hpp"
+﻿#include "../headers/search_examples.hpp"
 #include "../../include/AlgoBox/search.hpp"  
 #include <iostream>
 #include <vector>
@@ -21,68 +21,66 @@ static void print_intervals(const std::vector<std::pair<int, int>>& intervals) {
 
 void test_binary_search_bool() {
     std::vector<int> v = { 1, 3, 5, 7, 9, 11 };
-    std::cout << "Binary search (bool)\n";
-    std::cout << "Array: ";
+    std::cout << "Бинарный поиск (наличие)\n";
+    std::cout << "Массив: ";
     print_vector(v);
 
     bool found1 = ab::binary_search_bool(v, 5);
     bool found2 = ab::binary_search_bool(v, 6);
 
-    std::cout << "Search 5: " << (found1 ? "found" : "not found") << std::endl;
-    std::cout << "Search 6: " << (found2 ? "found" : "not found") << std::endl;
+    std::cout << "Поиск 5: " << (found1 ? "найден" : "не найден") << std::endl;
+    std::cout << "Поиск 6: " << (found2 ? "найден" : "не найден") << std::endl;
 
     assert(found1 == true);
     assert(found2 == false);
     std::cout << std::endl;
 }
 
-
 void test_binary_search_index() {
     std::vector<int> v = { 2, 4, 6, 8, 10 };
-    std::cout << "Binary search (index)\n";
-    std::cout << "Array: ";
+    std::cout << "Бинарный поиск (индекс)\n";
+    std::cout << "Массив: ";
     print_vector(v);
 
     size_t idx1 = ab::binary_search_index(v, 6);
     size_t idx2 = ab::binary_search_index(v, 7);
 
-    std::cout << "Index of 6: " << idx1 << std::endl;
-    std::cout << "Index of 7: " << idx2 << " (npos)" << std::endl;
-
-    assert(idx1 == 2);      
-    assert(idx2 == static_cast<size_t>(-1));
-    std::cout << std::endl;
-}
-
-void test_linear_search_index() {
-    std::vector<int> v = { 42, 17, 8, 99, 23 };
-    std::cout << "Linear search (index)\n";
-    std::cout << "Array: ";
-    print_vector(v);
-
-    size_t idx1 = ab::linear_search_index(v, 8);
-    size_t idx2 = ab::linear_search_index(v, 100);
-
-    std::cout << "Index of 8: " << idx1 << std::endl;
-    std::cout << "Index of 100: " << idx2 << " (npos)" << std::endl;
+    std::cout << "Индекс 6: " << idx1 << std::endl;
+    std::cout << "Индекс 7: " << idx2 << " (не найдено)" << std::endl;
 
     assert(idx1 == 2);
     assert(idx2 == static_cast<size_t>(-1));
     std::cout << std::endl;
 }
 
+void test_linear_search_index() {
+    std::vector<int> v = { 42, 17, 8, 99, 23 };
+    std::cout << "Линейный поиск (индекс)\n";
+    std::cout << "Массив: ";
+    print_vector(v);
+
+    size_t idx1 = ab::linear_search_index(v, 8);
+    size_t idx2 = ab::linear_search_index(v, 100);
+
+    std::cout << "Индекс 8: " << idx1 << std::endl;
+    std::cout << "Индекс 100: " << idx2 << " (не найдено)" << std::endl;
+
+    assert(idx1 == 2);
+    assert(idx2 == static_cast<size_t>(-1));
+    std::cout << std::endl;
+}
 
 void test_linear_search_bool() {
     std::vector<int> v = { 5, 10, 15, 20 };
-    std::cout << "Linear search (bool)\n";
-    std::cout << "Array: ";
+    std::cout << "Линейный поиск (наличие)\n";
+    std::cout << "Массив: ";
     print_vector(v);
 
     bool found1 = ab::linear_search_bool(v, 10);
     bool found2 = ab::linear_search_bool(v, 12);
 
-    std::cout << "Search 10: " << (found1 ? "found" : "not found") << std::endl;
-    std::cout << "Search 12: " << (found2 ? "found" : "not found") << std::endl;
+    std::cout << "Поиск 10: " << (found1 ? "найден" : "не найден") << std::endl;
+    std::cout << "Поиск 12: " << (found2 ? "найден" : "не найден") << std::endl;
 
     assert(found1 == true);
     assert(found2 == false);
@@ -91,12 +89,12 @@ void test_linear_search_bool() {
 
 void test_prefix_sum() {
     std::vector<int> v = { 3, 1, 4, 1, 5 };
-    std::cout << "Prefix sum\n";
-    std::cout << "Original: ";
+    std::cout << "Префиксные суммы\n";
+    std::cout << "Исходный: ";
     print_vector(v);
 
     std::vector<int> pref = ab::prefix_sum(v.begin(), v.end());
-    std::cout << "Prefix sums: ";
+    std::cout << "Префиксные суммы: ";
     print_vector(pref);
 
     assert(pref.size() == v.size());
@@ -112,17 +110,17 @@ void test_prefix_sum() {
 void test_range_sum() {
     std::vector<int> v = { 1, 2, 3, 4, 5 };
     std::vector<int> pref = ab::prefix_sum(v.begin(), v.end());
-    std::cout << "Range sum\n";
-    std::cout << "Array: ";
+    std::cout << "Сумма на отрезке\n";
+    std::cout << "Массив: ";
     print_vector(v);
-    std::cout << "Prefix sums: ";
+    std::cout << "Префиксные суммы: ";
     print_vector(pref);
 
-    int sum_1_3 = ab::range_sum(pref, 1, 3); 
-    int sum_0_4 = ab::range_sum(pref, 0, 4); 
+    int sum_1_3 = ab::range_sum(pref, 1, 3);
+    int sum_0_4 = ab::range_sum(pref, 0, 4);
 
-    std::cout << "Sum [1..3] = " << sum_1_3 << std::endl;
-    std::cout << "Sum [0..4] = " << sum_0_4 << std::endl;
+    std::cout << "Сумма [1..3] = " << sum_1_3 << std::endl;
+    std::cout << "Сумма [0..4] = " << sum_0_4 << std::endl;
 
     assert(sum_1_3 == 9);
     assert(sum_0_4 == 15);
@@ -133,32 +131,24 @@ void test_lower_bound_prefix() {
     std::vector<int> v = { 2, 3, 5, 7, 11 };
     std::vector<int> pref = ab::prefix_sum(v.begin(), v.end());
 
-    std::cout << "Lower bound on prefix sums\n";
-    std::cout << "Prefix sums: ";
-    print_vector(pref);
-
-    int target1 = 10;
-    int target2 = 18;
+    int target1 = 6;
+    int target2 = 50;
 
     int pos1 = ab::lower_bound_prefix(pref, target1);
     int pos2 = ab::lower_bound_prefix(pref, target2);
 
-    std::cout << "Lower bound of " << target1 << " -> index " << pos1 << std::endl;
-    std::cout << "Lower bound of " << target2 << " -> index " << pos2 << " (not found)" << std::endl;
-
     assert(pos1 == 2);
     assert(pos2 == -1);
-    std::cout << std::endl;
 }
 
 void test_scanning_line() {
     std::vector<std::pair<int, int>> intervals = { {1, 3}, {2, 5}, {4, 6} };
-    std::cout << "Scanning line (max overlaps)\n";
-    std::cout << "Intervals: ";
+    std::cout << "Сканирующая прямая (максимум пересечений)\n";
+    std::cout << "Интервалы: ";
     print_intervals(intervals);
 
     int max_overlap = ab::scaning_line(intervals.begin(), intervals.end());
-    std::cout << "Maximum number of overlapping intervals: " << max_overlap << std::endl;
+    std::cout << "Максимальное количество перекрывающихся интервалов: " << max_overlap << std::endl;
 
     assert(max_overlap == 2);
     std::cout << std::endl;
