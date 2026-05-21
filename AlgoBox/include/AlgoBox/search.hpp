@@ -99,8 +99,7 @@ namespace ab {
 
 	// ===================================================================================
 
-	// Prefix sum
-
+	// Prefix sum | O(n)
 	template<typename It>
 	auto prefix_sum(It first, It last) {
 		using T = typename std::iterator_traits<It>::value_type;
@@ -122,7 +121,7 @@ namespace ab {
 		return pref;
 	}
 
-	// Prefix sum in range [l, r]
+	// Prefix sum in range [l, r] | O (1)
 
 	template<typename Container>
 	auto range_sum(const Container& pref, size_t l, size_t r) {
@@ -134,7 +133,7 @@ namespace ab {
 
 	// ===================================================================================
 
-	// binary search + sum prefix
+	// binary search + sum prefix | O (log n)
 
 	template<typename Container, typename T>
 	int lower_bound_prefix(const Container& pref, const T& target) {
@@ -149,7 +148,7 @@ namespace ab {
 
 	// ===================================================================================
 
-	// Scaning Line
+	// Scaning Line | O (n log n), n - ranges amount
 
 	template<typename It>
 	int scaning_line(It first, It end) {

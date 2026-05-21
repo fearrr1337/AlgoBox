@@ -102,6 +102,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -123,12 +124,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="examples\headers\dataStructures_examples.hpp" />
     <ClInclude Include="examples\headers\search_examples.hpp" />
     <ClInclude Include="examples\headers\sorting_examples.hpp" />
     <ClInclude Include="include\AlgoBox\dataStructures.hpp" />
     <ClInclude Include="include\AlgoBox\sorting.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="examples\implementation\dataStructures_examples.cpp" />
     <ClCompile Include="examples\implementation\search_examples.cpp" />
     <ClCompile Include="examples\implementation\sorting_examples.cpp" />
     <ClCompile Include="main.cpp" />

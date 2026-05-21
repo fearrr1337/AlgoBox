@@ -3,6 +3,10 @@
 #include <stdexcept>
 #include <cstddef>
 #include <new>
+#include <iostream>
+#include <list>
+#include <utility>
+
 
 
 namespace ab {
@@ -14,12 +18,12 @@ namespace ab {
         std::vector<T> data;
 
     public:
-        // Add element
+        // Add element | O(1)
         void push(const T& value) {
             data.push_back(value);
         }
 
-        // Del element
+        // Del element | O(1)
         void pop() {
             if (empty()) {
                 throw std::out_of_range("Stack is empty");
@@ -27,7 +31,7 @@ namespace ab {
             data.pop_back();
         }
 
-        // Get top element
+        // Get top element O(1)
         T& top() {
             if (empty()) {
                 throw std::out_of_range("Stack is empty");
@@ -39,14 +43,15 @@ namespace ab {
             if (empty()) {
                 throw std::out_of_range("Stack is empty");
             }
+            return data.back();
         }
 
-        // Empty test
+        // Empty test | O(1)
         bool empty() {
             return data.empty();
         }
 
-        // arr size
+        // arr size | O(1)
         size_t size() const {
             return data.size();
         }
@@ -66,7 +71,7 @@ namespace ab {
         size_t tail; // last element (index)
         size_t count; // count elements in queue
 
-        // Resize array
+        // Resize array | O(n)
         void resize() {
             size_t new_capacity = capacity * 2;
             T* new_data = new T[new_capacity];
@@ -92,11 +97,12 @@ namespace ab {
             delete[] data;
         }
 
-
+        // O(1)
         bool empty() const {
             return count == 0;
         }
 
+        // O(1)
         size_t size() const {
             return count;
         }
@@ -111,7 +117,7 @@ namespace ab {
     public:
         using RingBufferBase<T>::RingBufferBase;   // inherit constructor
 
-        // Add element
+        // Add element | O(1)
         void push(const T& value) {
             if (this->count == this->capacity) {
                 this->resize();
@@ -121,7 +127,7 @@ namespace ab {
             ++this->count;
         }
 
-        // Del element
+        // Del element | O(1)
         void pop() {
             if (this->empty()) {
                 throw std::out_of_range("queue is empty");
@@ -130,7 +136,7 @@ namespace ab {
             --this->count;
         }
 
-        // First element
+        // First element | O(1)
         T& front() {
             if (this->empty()) {
                 throw std::out_of_range("queue is empty");
@@ -145,7 +151,7 @@ namespace ab {
             return this->data[this->head];
         }
 
-        // Last element
+        // Last element | O(1)
         T& back() {
             if (this->empty()) {
                 throw std::out_of_range("queue is empty");
@@ -170,7 +176,7 @@ namespace ab {
     public:
         using RingBufferBase<T>::RingBufferBase;   // inherit constructor
 
-        // Element push back
+        // Element push back | O(1)
         void push_back(const T& value) {
             if (this->count == this->capacity) {
                 this->resize();
@@ -180,7 +186,7 @@ namespace ab {
             ++this->count;
         }
 
-        // Element push front
+        // Element push front | O(1)
         void push_front(const T& value) {
             if (this->count == this->capacity) {
                 this->resize();
@@ -190,7 +196,7 @@ namespace ab {
             ++this->count;
         }
 
-        // Delete front element
+        // Delete front element | O(1)
         void pop_front() {
             if (this->empty()) {
                 throw std::out_of_range("deque is empty");
@@ -199,7 +205,7 @@ namespace ab {
             --this->count;
         }
 
-        // Delete back element
+        // Delete back element | O(1)
         void pop_back() {
             if (this->empty()) {
                 throw std::out_of_range("deque is empty");
@@ -208,7 +214,7 @@ namespace ab {
             --this->count;
         }
 
-        // Get the first element
+        // Get the first element | O(1)
         T& front() {
             if (this->empty()) {
                 throw std::out_of_range("deque is empty");
@@ -223,7 +229,7 @@ namespace ab {
             return this->data[this->head];
         }
 
-        // Get the last element
+        // Get the last element | O(1)
         T& back() {
             if (this->empty()) {
                 throw std::out_of_range("deque is empty");
@@ -353,7 +359,7 @@ namespace ab {
 
         Node* root = nullptr;
 
-        // insert
+        // insert | O(h), h - tree height
         Node* insert(Node* node, const T& value) {
             if (!node) {
                 return new Node(value);
@@ -369,7 +375,7 @@ namespace ab {
             return node;
         }
 
-        // Search
+        // Search | O(h)
         bool contains(Node* node, const T& value) const {
             if (!node) {
                 return false;
@@ -386,7 +392,7 @@ namespace ab {
             return contains(node->right, value);
         }
 
-        // Find min
+        // Find min | O(h)
         Node* find_min(Node* node) {
             while (node && node->left) {
                 node = node->left;
@@ -394,7 +400,7 @@ namespace ab {
             return node;
         }
 
-        // Del 
+        // Del | O(h)
         Node* remove(Node* node, const T& value) {
             if (!node) {
                 return nullptr;
@@ -425,6 +431,7 @@ namespace ab {
             return node;
         }
 
+        // O(n)
         void inorder(Node* node) const {
             if (!node) {
                 return;
@@ -435,6 +442,7 @@ namespace ab {
             inorder(node->right);
         }
 
+        // O(n)
         void clear(Node* node) {
             if (!node) {
                 return;
@@ -449,18 +457,22 @@ namespace ab {
             clear(root);
         }
 
+        // O(h)
         void insert(const T& value) {
             root = insert(root, value);
         }
 
+        // O(h)
         void remove(const T& value) {
             root = remove(root, value);
         }
 
+        // O(h)
         bool contains(const T& value) const {
             return contains(root, value);
         }
 
+        // O(n)
         void print_inorder() const {
             inorder(root);
             std::cout << "\n";
@@ -486,7 +498,7 @@ namespace ab {
 
         Node* root = nullptr;
 
-        // split
+        // split | O(log n)
         void split(Node* node, const T& key, Node*& left, Node*& right) {
             if (!node) {
                 left = right = nullptr;
@@ -501,7 +513,7 @@ namespace ab {
             }
         }
 
-        // merge trees
+        // merge trees | O(log n)
         Node* merge(Node* left, Node* right) {
             if (!left || !right) {
                 return left ? left : right;
@@ -516,7 +528,7 @@ namespace ab {
             }
         }
 
-        // insert
+        // insert | O(log n)
         Node* insert(Node* node, Node* item) {
             if (!node) {
                 return item;
@@ -538,7 +550,7 @@ namespace ab {
         }
 
 
-        // remove
+        // remove | O(log n)
         Node* remove(Node* node, const T& key) {
             if (!node) {
                 return nullptr;
@@ -561,7 +573,7 @@ namespace ab {
         }
 
 
-        // search
+        // search | O(log n)
         bool contains(Node* node, const T& key) const {
             if (!node) {
                 return false;
@@ -580,18 +592,383 @@ namespace ab {
         }
 
     public:
+        // O(log n)
         void insert(const T& key) {
             root = insert(root, new Node(key));
         }
 
+        // O(log n)
         void remove(const T& key) {
             root = remove(root, key);
         }
 
+        // O(log n)
         bool contains(const T& key) const {
             return contains(root, key);
         }
-  };
+    };
+
+    // =======================================================================================
+
+    // AVL-TREE
+    template<typename T>
+    class avl_tree {
+    private:
+        struct Node {
+            T value;
+
+            Node* left;
+            Node* right;
+
+            int height;
+
+            Node(const T& val)
+                : value(val), left(nullptr), right(nullptr), height(1) {
+            }
+        };
+
+        Node* root = nullptr;
+
+        // O(1)
+        int get_height(Node* node) const {
+            return node ? node->height : 0;
+        }
+
+        // O(1)
+        int get_balance(Node* node) const {
+            return node
+                ? get_height(node->left) - get_height(node->right)
+                : 0;
+        }
+
+        // O(1)
+        void update_height(Node* node) {
+            node->height = 1 + std::max(get_height(node->left), get_height(node->right));
+        }
+
+        // Right Rotate | O(1)
+        Node* rotate_right(Node* y) {
+            Node* x = y->left;
+            Node* t2 = x->right;
+
+            x->right = y;
+            y->left = t2;
+
+            update_height(y);
+            update_height(x);
+
+            return x;
+        }
+
+        // Left Rotate | O(1)
+        Node* rotate_left(Node* x) {
+            Node* y = x->right;
+            Node* t2 = y->left;
+
+            y->left = x;
+            x->right = t2;
+
+            update_height(x);
+            update_height(y);
+
+            return y;
+        }
+
+        // O(log n)
+        Node* insert(Node* node, const T& value) {
+
+            if (!node) {
+                return new Node(value);
+            }
+
+            if (value < node->value) {
+                node->left = insert(node->left, value);
+            }
+
+            else if (value > node->value) {
+                node->right = insert(node->right, value);
+            }
+
+            else {
+                return node;
+            }
+
+            update_height(node);
+
+            int balance = get_balance(node);
+
+            // LL
+            if (balance > 1 && value < node->left->value) {
+                return rotate_right(node);
+            }
+
+            // RR
+            if (balance < -1 && value > node->right->value) {
+                return rotate_left(node);
+            }
+
+            // LR
+            if (balance > 1 && value > node->left->value) {
+                node->left = rotate_left(node->left);
+                return rotate_right(node);
+            }
+
+            // RL
+            if (balance < -1 && value < node->right->value) {
+                node->right = rotate_right(node->right);
+                return rotate_left(node);
+            }
+
+            return node;
+        }
+
+        // O(log n)
+        bool contains(Node* node, const T& value) const {
+
+            if (!node)
+                return false;
+
+            if (value == node->value)
+                return true;
+
+            if (value < node->value)
+                return contains(node->left, value);
+
+            return contains(node->right, value);
+        }
+
+        // O(n)
+        void clear(Node* node) {
+
+            if (!node)
+                return;
+
+            clear(node->left);
+            clear(node->right);
+
+            delete node;
+        }
+
+    public:
+        ~avl_tree() {
+            clear(root);
+        }
+
+        // O(log n)
+        void insert(const T& value) {
+            root = insert(root, value);
+        }
+
+        // O(log n)
+        bool contains(const T& value) const {
+            return contains(root, value);
+        }
+    };
+
+    // =======================================================================================
+
+    // RED-BLACK TREE
+    template<typename T>
+    class red_black_tree {
+    private:
+
+        enum Color {
+            RED,
+            BLACK
+        };
+
+        struct Node {
+            T value;
+
+            Color color;
+
+            Node* left;
+            Node* right;
+            Node* parent;
+
+            Node(const T& val)
+                : value(val),
+                color(RED),
+                left(nullptr),
+                right(nullptr),
+                parent(nullptr) {
+            }
+        };
+
+        Node* root = nullptr;
+
+        // O(1)
+        void rotate_left(Node* x) {
+
+            Node* y = x->right;
+            x->right = y->left;
+
+            if (y->left)
+                y->left->parent = x;
+
+            y->parent = x->parent;
+
+            if (!x->parent)
+                root = y;
+
+            else if (x == x->parent->left)
+                x->parent->left = y;
+
+            else
+                x->parent->right = y;
+
+            y->left = x;
+            x->parent = y;
+        }
+
+        // O(1)
+        void rotate_right(Node* y) {
+
+            Node* x = y->left;
+            y->left = x->right;
+
+            if (x->right)
+                x->right->parent = y;
+
+            x->parent = y->parent;
+
+            if (!y->parent)
+                root = x;
+
+            else if (y == y->parent->left)
+                y->parent->left = x;
+
+            else
+                y->parent->right = x;
+
+            x->right = y;
+            y->parent = x;
+        }
+
+        // O(log n)
+        void fix_insert(Node* z) {
+
+            while (z != root && z->parent->color == RED) {
+
+                Node* parent = z->parent;
+                Node* grandparent = parent->parent;
+
+
+                if (parent == grandparent->left) {
+
+                    Node* uncle = grandparent->right;
+
+
+                    if (uncle && uncle->color == RED) {
+
+                        parent->color = BLACK;
+                        uncle->color = BLACK;
+                        grandparent->color = RED;
+
+                        z = grandparent;
+                    }
+                    else {
+
+
+                        if (z == parent->right) {
+                            z = parent;
+                            rotate_left(z);
+                        }
+
+
+                        parent->color = BLACK;
+                        grandparent->color = RED;
+
+                        rotate_right(grandparent);
+                    }
+                }
+
+
+                else {
+
+                    Node* uncle = grandparent->left;
+
+
+                    if (uncle && uncle->color == RED) {
+
+                        parent->color = BLACK;
+                        uncle->color = BLACK;
+                        grandparent->color = RED;
+
+                        z = grandparent;
+                    }
+                    else {
+
+
+                        if (z == parent->left) {
+                            z = parent;
+                            rotate_right(z);
+                        }
+
+
+                        parent->color = BLACK;
+                        grandparent->color = RED;
+
+                        rotate_left(grandparent);
+                    }
+                }
+            }
+
+            root->color = BLACK;
+        }
+
+        // O(n)
+        void clear(Node* node) {
+
+            if (!node)
+                return;
+
+            clear(node->left);
+            clear(node->right);
+
+            delete node;
+        }
+
+    public:
+
+        ~red_black_tree() {
+            clear(root);
+        }
+
+        // O(log n)
+        void insert(const T& value) {
+
+            Node* z = new Node(value);
+
+            Node* y = nullptr;
+            Node* x = root;
+
+            while (x) {
+
+                y = x;
+
+                if (z->value < x->value)
+                    x = x->left;
+                else
+                    x = x->right;
+            }
+
+            z->parent = y;
+
+            if (!y)
+                root = z;
+
+            else if (z->value < y->value)
+                y->left = z;
+
+            else
+                y->right = z;
+
+            fix_insert(z);
+        }
+    };
+
+
 
 
     // =======================================================================================
@@ -610,22 +987,26 @@ namespace ab {
         // Constructor
         Node(T val) : data(val), next(nullptr) {}
 
-        // Get data
-        T getData() const { 
-            return data; 
+        // Get data | O(1)
+        T& getData() {
+            return data;
         }
 
-        // Set data
+        const T& getData() const {
+            return data;
+        }
+
+        // Set data | O(1)
         void setData(const T& val) {
             data = val;
         }
 
-        // Get next node
+        // Get next node | O(1)
         Node* getNext() const {
             return next;
         }
 
-        // Set next node
+        // Set next node | O(1)
         void setNext(Node* node) {
             next = node;
         }
@@ -639,7 +1020,7 @@ namespace ab {
         Node<T>* tail;
         size_t count;
 
-        // Clear all nodes
+        // Clear all nodes | O(n)
         void clear() {
             while (head) {
                 Node<T>* temp = head;
@@ -659,17 +1040,17 @@ namespace ab {
             clear();
         }
 
-        // Is empty test
+        // Is empty test | O(1)
         bool empty() {
             return count == 0;
         }
 
-        // Size
+        // Size | O(1)
         size_t size() {
             return count;
         }
 
-        // Push back
+        // Push back | O(1)
         void push_back(const T& value) {
             Node<T>* new_node = new Node<T>(value);
             if (!head) {
@@ -682,17 +1063,18 @@ namespace ab {
             ++count;
         }
 
-        // Push front
+        // Push front | O(1)
         void push_front(const T& value) {
             Node<T>* new_node = new Node<T>(value);
             new_node->setNext(head);
+            head = new_node;
             if (!tail) {
                 tail = new_node;
             }
             ++count;
         }
 
-        // Remove front 
+        // Remove front | O(1)
         void pop_front() {
             if (empty()) {
                 throw std::out_of_range("LinkedList is empty");
@@ -707,7 +1089,7 @@ namespace ab {
             --count;
         }
 
-        // Remove back
+        // Remove back | O(n)
         void pop_back() {
             if (empty()) {
                 throw std::out_of_range("LinkedList is empty");
@@ -729,7 +1111,7 @@ namespace ab {
             --count;
         }
 
-        // Get front element
+        // Get front element | O(1)
         T& front() {
             if (empty()) {
                 throw std::out_of_range("LinkedList empty");
@@ -747,7 +1129,7 @@ namespace ab {
             return head->getData();
         }
 
-        // Get back element
+        // Get back element | O(1)
         T& back() {
             if (empty()) {
                 throw std::out_of_range("LinkedList empty");
@@ -765,13 +1147,15 @@ namespace ab {
             return tail->getData();
         }
         
-        // Print list
+        // Print list | O(n)
         void print() const {
             Node<T>* curr = head;
-            while (head) {
+
+            while (curr) {
                 std::cout << curr->getData() << " ";
                 curr = curr->getNext();
             }
+
             std::cout << std::endl;
         }
 
@@ -793,32 +1177,36 @@ namespace ab {
         // Constructor
         doubly_node(T val = T()) : data(val), next(nullptr), prev(nullptr) {}
 
-        // Get data
-        T getData() const {
+        // Get data | O(1)
+        T& getData() {
             return data;
         }
 
-        // Set data
+        const T& getData() const {
+            return data;
+        }
+
+        // Set data | O(1)
         void setData(const T& val) {
             data = val;
         }
         
-        // Get next node
+        // Get next node | O(1)
         doubly_node* getNext() const {
             return next;
         }
 
-        // Set next node
+        // Set next node | O(1)
         void setNext(doubly_node* node) {
             next = node;
         }
 
-        // Get prev node
+        // Get prev node | O(1)
         doubly_node* getPrev() const {
             return prev;
         }
 
-        // Set prev node
+        // Set prev node | O(1)
         void setPrev(doubly_node* node) {
             prev = node;
         }
@@ -833,7 +1221,7 @@ namespace ab {
         doubly_node<T>* tail;
         size_t count;
 
-        // Cleat all nodes
+        // Cleat all nodes | O(n)
         void clear() {
             while (head) {
                 doubly_node<T>* temp = head;
@@ -853,17 +1241,17 @@ namespace ab {
             clear();
         }
 
-        // Empty test
+        // Empty test | O(1)
         bool empty() const {
             return count == 0;
         }
 
-        // Size
+        // Size | O(1)
         size_t size() const {
             return count;
         }
 
-        // Push back
+        // Push back | O(1)
         void push_back(const T& value) {
             doubly_node<T>* new_node = new doubly_node<T>(value);
             if (!head) {
@@ -877,11 +1265,11 @@ namespace ab {
             ++count;
         }
 
-        // Push front
+        // Push front | O(1)
         void push_front(const T& value) {
             doubly_node<T>* new_node = new doubly_node<T>(value);
             if (!head) {
-                head = tail = new_node();
+                head = tail = new_node;
             }
             else {
                 new_node->setNext(head);
@@ -891,7 +1279,7 @@ namespace ab {
             ++count;
         }
 
-        // Remove front 
+        // Remove front  | O(1)
         void pop_front() {
             if (empty()) {
                 throw std::out_of_range("Doubly LinkedList is empty");
@@ -910,7 +1298,7 @@ namespace ab {
             --count;
         }
 
-        // Remove back
+        // Remove back | O(1)
         void pop_back() {
             if (empty()) {
                 throw std::out_of_range("Doubly LinkedList is empty");
@@ -929,7 +1317,7 @@ namespace ab {
             --count;
         }
 
-        // Front Element
+        // Front Element | O(1)
         T& front() {
             if (empty()) {
                 throw std::out_of_range("Doubly LinkedList is empty");
@@ -939,7 +1327,7 @@ namespace ab {
         }
 
 
-        // Front Element (const)
+        // Front Element (const) | O(1)
         const T& front() const {
             if (empty()) {
                 throw std::out_of_range("Doubly LinkedList is empty");
@@ -948,7 +1336,7 @@ namespace ab {
             return head->getData();
         }
 
-        // Back Element
+        // Back Element | O(1)
         T& back() {
             if (empty()) {
                 throw std::out_of_range("Doubly LinkedList is empty");
@@ -957,7 +1345,7 @@ namespace ab {
             return tail->getData();
         }
 
-        // Back Element (consst)
+        // Back Element (consst) | O(1)
         const T& back() const {
             if (empty()) {
                 throw std::out_of_range("Doubly LinkedList is empty");
@@ -967,7 +1355,7 @@ namespace ab {
         }
 
 
-        // Print forward
+        // Print forward | O(n)
         void print_forward() const {
             doubly_node<T>* curr = head;
             while (curr) {
@@ -977,11 +1365,11 @@ namespace ab {
             std::cout << std::endl;
         }
 
-        // Print reverse
+        // Print reverse | O(n)
         void print_reverse() const {
-            doubly_node<T> curr = tail;
+            doubly_node<T>* curr = tail;
             while (curr) {
-                std::count << curr->getData() << " ";
+                std::cout << curr->getData() << " ";
                 curr = curr->getPrev();
             }
             std::cout << std::endl;
@@ -1009,7 +1397,7 @@ namespace ab {
             ::operator delete(data);
         }
 
-        // memory allocation
+        // memory allocation | O(1)
         void* allocate(size_t size, size_t aligment = alignof(std::max_align_t)) {
             size_t current = reinterpret_cast<size_t>(data + offset);
 
@@ -1025,14 +1413,14 @@ namespace ab {
             return reinterpret_cast<void*>(aligned);
         }
 
-        // create object
+        // create object | O(1)
         template<typename T, typename... Args>
         T* create(Args&&... args) {
-            void mem = allocate(sizeof(T), alignof(T));
+            void* mem = allocate(sizeof(T), alignof(T));
             return new (mem) T(std::forward<Args>(args)...);
         }
 
-        // reset all memory
+        // reset all memory | O(1)
         void reset() {
             offset = 0;
         }
@@ -1044,5 +1432,103 @@ namespace ab {
 
     // HASH TABLE
 
-    
+    template <typename Key, typename Value>
+    class hash_table {
+    private:
+
+
+        using pair_type = std::pair<Key, Value>;
+        std::vector<std::list<pair_type>> table;
+        size_t current_size;
+
+        // hash function | O(1)
+        size_t hash(const Key& key) const {
+            return std::hash<Key>{}(key) % table.size();
+        }
+
+
+    public:
+
+        hash_table(size_t size = 101) : table(size), current_size(0) {}
+
+        // Insert | O(1)
+        void insert(const Key& key, const Value& value) {
+            size_t index = hash(key);
+
+            // if key already exist, then update value
+            for (auto& [k, v] : table[index]) {
+                if (k == key) {
+                    v = value;
+                    return;
+                }
+            }
+
+            table[index].push_back({ key, value });
+            ++current_size;
+        }
+
+        // Contains | O(1)
+        bool contains(const Key& key) const {
+            size_t index = hash(key);
+
+            for (const auto& [k, v] : table[index]) {
+                if (k == key) {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        // Get | O(1)
+        Value& get(const Key& key) {
+            size_t index = hash(key);
+
+            for (auto& [k, v] : table[index]) {
+                if (k == key) {
+                    return v;
+                }
+            }
+
+            throw std::out_of_range("Key not found");
+        }
+        
+        const Value& get(const Key& key) const {
+            size_t index = hash(key);
+
+            for (const auto& [k, v] : table[index]) {
+                if (k == key)
+                    return v;
+            }
+
+            throw std::out_of_range("Key not found");
+        }
+
+
+        // Remove | O(1)
+        void remove(const Key& key) {
+            size_t index = hash(key);
+
+            auto& bucket = table[index];
+
+            for (auto it = bucket.begin(); it != bucket.end(); ++it) {
+                if (it->first == key) {
+                    bucket.erase(it);
+                    --current_size;
+                    return;
+                }
+            }
+        }
+
+        // Size | O(1)
+        size_t size() const {
+            return current_size;
+        }
+
+        // Empty | O(1)
+        bool empty() const {
+            return current_size == 0;
+        }
+
+    };
 }
